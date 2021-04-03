@@ -23,58 +23,35 @@ export class StockService implements IStockService {
     return webStocks;
   }
 
-  async newStock(
-    id: string,
-    name: string,
-    price: number,
-    description: string,
-  ): Promise<Stock> {
-    const stockFromDB = await this.stockRepository.findOne({ name });
-    if (!stockFromDB) {
-      const stock = this.stockRepository.create();
-      stock.id = id;
-      stock.name = name;
-      stock.price = price;
-      stock.description = description;
-      await this.stockRepository.save(stock);
-      return {
-        id: '' + stock.id,
-        name: stock.name,
-        price: stock.price,
-        description: stock.description,
-      };
-    }
-    if (stockFromDB.id === id) {
-      return {
-        id: '' + stockFromDB.id,
-        name: stockFromDB.name,
-        price: stockFromDB.price,
-        description: stockFromDB.description,
-      };
-    } else {
-      throw new Error('This stock already exists');
-    }
-    return undefined;
+  async newStock(stock: Stock): Promise<Stock> {
+    const createdStock = await this.stockRepository.create(stock);
+    const stockEntitySaved = await this.stockRepository.save(stock);
+    const stockToReturn: Stock = {
+      id: stockEntitySaved.id,
+      name: stockEntitySaved.name,
+      price: stockEntitySaved.price,
+      description: stockEntitySaved.description,
+    };
+    console.log('entiy saved', stockToReturn);
+    return stockToReturn;
   }
 
-  async updateStock(
-    id: string,
-    name: string,
-    price: number,
-    description: string,
-  ): Promise<Stock> {
-    const stockToUpdate = await this.stockRepository.findOne(id);
-    if (stockToUpdate) {
-      stockToUpdate.name = name;
-      stockToUpdate.price = price;
-      stockToUpdate.description = description;
-      await this.stockRepository.save(stockToUpdate);
-    }
+  async updateStock(stock: Stock): Promise<Stock> {
+    const update = { name: stock.name, price: stock.price, description: stock.description };
+    const updatedStock = await this.stockRepository.update(stock.id, update);
     return undefined;
   }
 
   async findStock(id: string): Promise<Stock> {
     const stock = this.stockRepository.findOne({ id });
     return stock;
+  }
+
+  async ChangePrice(id: string, newPrice: number): Promise<Stock> {
+    console.log();
+    const update = { price: newPrice };
+    const updatedStock = await this.stockRepository.update(id, update);
+    console.log('updated', updatedStock);
+    return undefined;
   }
 }

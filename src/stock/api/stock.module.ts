@@ -12,4 +12,4 @@ import { Module, Post } from '@nestjs/common';
     { provide: IStockServiceProvider, useClass: StockService },
   ],
 })
-export class ChatModule {}
+export class StockModule {}

@@ -3,12 +3,7 @@ import { Stock } from '../models/stock.model';
 export const IStockServiceProvider = 'IStockServiceProvider';
 
 export interface IStockService {
-  newStock(
-    id: string,
-    name: string,
-    price: number,
-    description: string,
-  ): Promise<Stock>;
+  newStock(stock: Stock): Promise<Stock>;
 
   getStocks(): Promise<Stock[]>;
 
@@ -16,5 +11,7 @@ export interface IStockService {
 
   findStock(id: string): Promise<Stock>;
 
-  updateStock(id: string, name: string, price: number, description: string): Promise<Stock>;
+  updateStock(stock: Stock): Promise<Stock>;
+
+  ChangePrice(id: string, newPrice: number): Promise<Stock>;
 }

@@ -4,6 +4,7 @@ import { AppService } from './app.service';
 import { ConfigModule } from '@nestjs/config';
 import * as Joi from '@hapi/joi';
 import { DatabaseModule } from './stock/infrastructure/database.module';
+import { StockModule } from './stock/api/stock.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { DatabaseModule } from './stock/infrastructure/database.module';
       }),
     }),
     DatabaseModule,
+    StockModule,
   ],
   controllers: [AppController],
   providers: [AppService],
